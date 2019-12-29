@@ -26,4 +26,5 @@ export interface IFetchedData {
   address: string;
   location: { lat: number; long: number };
   supplier: string;
+  colourOnMap: string;
 }

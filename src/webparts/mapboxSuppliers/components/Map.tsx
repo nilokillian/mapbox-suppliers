@@ -1,16 +1,21 @@
 import * as React from "react";
-import { renderToString } from "react-dom/server";
 import { useState, useEffect, useRef, useContext } from "react";
 import * as MapBoxGL from "mapbox-gl";
-import styles from "./MapboxSuppliers.module.scss";
+import "./MapboxSuppliers.module.scss";
 import { DataSourceContext } from "../contexts/DataSourceContext";
 import { IFetchedData, IMapState, IMapProps } from "../interfaces/IMap";
-import { dataMapper } from "../mappers/dataSourceMapper";
-import { SupplierDetails } from "./SupplierDetails";
+import { SuppliersFilterPanel } from "./SuppliersFilterPanel";
+import {
+  dataMapper,
+  getCircleColour,
+  getUniqueSuppiers
+} from "../mappers/dataSourceMapper";
+import styles from "./MapboxSuppliers.module.scss";
+import { mapContainerStyle } from "../styles/styleObjects";
 
 export const Map: React.FC<IMapProps> = ({ token }): JSX.Element => {
   const mapContainer = useRef<HTMLInputElement>(null);
-  //const [rawData, setRawData] = useState<any[]>();
+  const [selectedSuppliers, setSelectedSuppliers] = useState<string[]>([]);
   const { data } = useContext(DataSourceContext);
   const [mapSettings, setMapSettings] = useState<IMapState>({
     isMapInitialized: false,
@@ -72,18 +77,10 @@ export const Map: React.FC<IMapProps> = ({ token }): JSX.Element => {
     // } as GeoJSON.FeatureCollection;
   };
 
-  // useEffect(() => {
-  //   setRawData([
-  //     {
-  //       contact: "Alex Andreev",
-  //       address: "3b/44 Liverpool st Auckland",
-  //       email: "alex@downer.com",
-  //       mobile: "4532323",
-  //       landline: "32088673",
-  //       location: { long: 174.7631803, lat: -36.852095 }
-  //     }
-  //   ]);
-  // }, []);
+  useEffect(() => {
+    const currentSelectedSuppliers = getUniqueSuppiers(data);
+    setSelectedSuppliers(currentSelectedSuppliers.map(s => s.Supplier.Title));
+  }, []);
 
   useEffect(() => {
     const initializeMap = (): void => {
@@ -94,6 +91,7 @@ export const Map: React.FC<IMapProps> = ({ token }): JSX.Element => {
         container: mapContainer.current!,
         ...vieport
       });
+
       map.on("load", () => {
         map.addLayer({
           id: "points",
@@ -103,15 +101,18 @@ export const Map: React.FC<IMapProps> = ({ token }): JSX.Element => {
             type: "geojson",
             data: createFeatureCollection(dataMapper(data))
           },
+
           paint: {
-            "circle-radius": 6,
-            "circle-color": "#8dc63f"
-          },
-          layout: {
-            "text-field": "supplier"
-            // "text-field": ["get", "supplier"],
-            // "text-offset": [0.5],
-            // "text-justify": "center"
+            "circle-radius": {
+              base: 6,
+              stops: [
+                [12, 6],
+                [22, 180]
+              ]
+            },
+            "circle-color": getCircleColour(data),
+            "circle-stroke-color": "#000",
+            "circle-stroke-width": 1
           }
         });
       });
@@ -130,19 +131,19 @@ export const Map: React.FC<IMapProps> = ({ token }): JSX.Element => {
           coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
         }
 
-        const html = renderToString(<SupplierDetails />);
+        new MapBoxGL.Marker().getElement();
 
         new MapBoxGL.Popup()
           .setLngLat(coordinates)
-
           .setHTML(
-            html
-            // //   `
-            // // <strong>${contact}</strong>
-            // // <strong>${email}</strong>
-            // // <strong>${mobile}</strong>
-            // // <strong>${landline}</strong>
-            // // `
+            `<div className='popUp'> 
+            <strong>${contact}</strong></br>
+            <em>${email}</em></br>
+            <em>${mobile}</em></br>
+            <em>${landline}</em></br>
+            <em>${address}</em>
+            </div> 
+            `
           )
           .addTo(map);
       });
@@ -152,20 +153,20 @@ export const Map: React.FC<IMapProps> = ({ token }): JSX.Element => {
   }, [data, mapSettings]);
 
   return (
-    <div
-      style={{
-        //  position: "absolute",
-        top: "0",
-        right: "0",
-        left: "0",
-        bottom: "0",
-        width: "100%",
-        height: "800px",
-        margin: "0 auto"
-      }}
-      ref={mapContainer}
-    />
+    <div>
+      <SuppliersFilterPanel
+        data={data}
+        selectedSuppliers={selectedSuppliers}
+        onSelectedChenged={selected => {
+          console.log("selected", selected);
+          setSelectedSuppliers(selected);
+        }}
+      />
+      <div
+        className="mapContainer"
+        style={mapContainerStyle}
+        ref={mapContainer}
+      />
+    </div>
   );
 };
-
-// className={styles.mapContainer}

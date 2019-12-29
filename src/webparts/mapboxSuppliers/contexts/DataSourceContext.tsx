@@ -29,7 +29,7 @@ export const DataSourceContextProvider: React.FC<IMapboxSuppliersProps> = props 
 
   return (
     <DataSourceContext.Provider value={{ data }}>
-      {props.children}
+      {data && data.length > 0 && props.children}
     </DataSourceContext.Provider>
   );
 };

@@ -1,6 +1,7 @@
 import * as React from "react";
 import * as ReactDom from "react-dom";
 import { Version } from "@microsoft/sp-core-library";
+import { SPComponentLoader } from "@microsoft/sp-loader";
 import {
   BaseClientSideWebPart,
   IPropertyPaneConfiguration,
@@ -66,6 +67,11 @@ export default class MapboxSuppliersWebPart extends BaseClientSideWebPart<
 
   protected async onInit(): Promise<void> {
     await super.onInit();
+
+    SPComponentLoader.loadCss(
+      "https://api.tiles.mapbox.com/mapbox-gl-js/v1.6.1/mapbox-gl.css"
+    );
+
     SharePointService.setup(this.context);
     SharePointService.pnp_setup(this.context);
   }

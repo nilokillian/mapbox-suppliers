@@ -11,4 +11,5 @@ export interface IDataSourceList {
   Region: { Title: string };
   Sectors: [{ Title: string }];
   Supplier: { Title: string };
+  ColourOnMap: string;
 }

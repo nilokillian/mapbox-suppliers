@@ -11,4 +11,5 @@ export interface ISuppliersList {
   region?: string;
   sectors?: string[];
   supplier?: string;
+  colourOnMap?: string;
 }
