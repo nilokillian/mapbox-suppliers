@@ -30,3 +30,25 @@ export const mapContainerStyle = {
   height: "800px",
   margin: "0 auto"
 };
+
+export const suppliersListPanelContainerStyle = {
+  position: "absolute" as "absolute",
+  top: "0",
+  left: "84%",
+  margin: "12px",
+  backgroundColor: "#ffffff6e",
+  color: "#404040",
+  zIndex: 1,
+  padding: "6px"
+};
+
+export const appContainerStyle = {
+  //  position: "absolute",
+  top: "0",
+  right: "0",
+  left: "0",
+  bottom: "0",
+  width: "100%",
+  height: "800px",
+  margin: "0 auto"
+};

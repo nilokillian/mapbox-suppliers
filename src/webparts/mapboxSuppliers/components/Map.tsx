@@ -5,16 +5,22 @@ import "./MapboxSuppliers.module.scss";
 import { DataSourceContext } from "../contexts/DataSourceContext";
 import { IFetchedData, IMapState, IMapProps } from "../interfaces/IMap";
 import { SuppliersFilterPanel } from "./SuppliersFilterPanel";
+import { SuppliersListPanel } from "./SuppliersListPanel";
 import {
   dataMapper,
   getCircleColour,
   getUniqueSuppiers
 } from "../mappers/dataSourceMapper";
-import styles from "./MapboxSuppliers.module.scss";
-import { mapContainerStyle } from "../styles/styleObjects";
+import {
+  mapContainerStyle,
+  suppliersListPanelContainerStyle
+} from "../styles/styleObjects";
+import { DefaultButton } from "office-ui-fabric-react";
+import { IDataSourceList } from "../interfaces/IDataSourceList";
 
 export const Map: React.FC<IMapProps> = ({ token }): JSX.Element => {
   const mapContainer = useRef<HTMLInputElement>(null);
+  const [isSuppliersListPanel, setIsSuppliersListPanel] = React.useState(false);
   const [selectedSuppliers, setSelectedSuppliers] = useState<string[]>([]);
   const { data } = useContext(DataSourceContext);
   const [mapSettings, setMapSettings] = useState<IMapState>({
@@ -77,10 +83,22 @@ export const Map: React.FC<IMapProps> = ({ token }): JSX.Element => {
     // } as GeoJSON.FeatureCollection;
   };
 
+  const onSuppliersFilter = () => {
+    const filteredSuppliers: IDataSourceList[] = [];
+
+    data.map(d => {
+      const isIn = selectedSuppliers.some(s => s === d.Supplier.Title);
+
+      if (isIn) filteredSuppliers.push(d);
+    });
+
+    return filteredSuppliers;
+  };
+
   useEffect(() => {
     const currentSelectedSuppliers = getUniqueSuppiers(data);
     setSelectedSuppliers(currentSelectedSuppliers.map(s => s.Supplier.Title));
-  }, []);
+  }, [data]);
 
   useEffect(() => {
     const initializeMap = (): void => {
@@ -96,12 +114,10 @@ export const Map: React.FC<IMapProps> = ({ token }): JSX.Element => {
         map.addLayer({
           id: "points",
           type: "circle",
-
           source: {
             type: "geojson",
-            data: createFeatureCollection(dataMapper(data))
+            data: createFeatureCollection(dataMapper(onSuppliersFilter()))
           },
-
           paint: {
             "circle-radius": {
               base: 6,
@@ -110,8 +126,11 @@ export const Map: React.FC<IMapProps> = ({ token }): JSX.Element => {
                 [22, 180]
               ]
             },
-            "circle-color": getCircleColour(data),
-            "circle-stroke-color": "#000",
+            "circle-color":
+              selectedSuppliers.length > 0
+                ? getCircleColour(onSuppliersFilter())
+                : "red",
+            "circle-stroke-color": "#fff",
             "circle-stroke-width": 1
           }
         });
@@ -149,8 +168,13 @@ export const Map: React.FC<IMapProps> = ({ token }): JSX.Element => {
       });
       setMapSettings(mapSettings);
     };
-    if (data && !mapSettings.isMapInitialized) initializeMap();
-  }, [data, mapSettings]);
+    if (
+      data.length > 0 &&
+      selectedSuppliers.length > 0 &&
+      !mapSettings.isMapInitialized
+    )
+      initializeMap();
+  }, [data, mapSettings, selectedSuppliers]);
 
   return (
     <div>
@@ -158,15 +182,32 @@ export const Map: React.FC<IMapProps> = ({ token }): JSX.Element => {
         data={data}
         selectedSuppliers={selectedSuppliers}
         onSelectedChenged={selected => {
-          console.log("selected", selected);
           setSelectedSuppliers(selected);
+
+          mapSettings.isMapInitialized = false;
+
+          setMapSettings(mapSettings);
         }}
       />
+
+      <DefaultButton
+        text="List of suppliers"
+        onClick={() => setIsSuppliersListPanel(true)}
+        style={suppliersListPanelContainerStyle}
+      />
+
       <div
         className="mapContainer"
         style={mapContainerStyle}
         ref={mapContainer}
-      />
+      >
+        {isSuppliersListPanel && (
+          <SuppliersListPanel
+            onClose={() => setIsSuppliersListPanel(false)}
+            isOpen={isSuppliersListPanel}
+          />
+        )}
+      </div>
     </div>
   );
 };
