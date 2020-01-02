@@ -16,21 +16,14 @@ export const SuppliersListPanel: React.FunctionComponent<ISuppliersListPanelProp
   onClose
 }) => {
   return (
-    <div>
-      {explanation}
-      <br />
-      <br />
-      {/* <DefaultButton text="Open panel" onClick={() => setIsOpen(true)} /> */}
-      <Panel
-        headerText="Non-modal panel"
-        // this prop makes the panel non-modal
-        isBlocking={false}
-        isOpen={isOpen}
-        onDismiss={() => onClose()}
-        closeButtonAriaLabel="Close"
-      >
-        <SuppliersList />
-      </Panel>
-    </div>
+    <Panel
+      headerText="Suppliers List"
+      isBlocking={false}
+      isOpen={isOpen}
+      onDismiss={() => onClose()}
+      closeButtonAriaLabel="Close"
+    >
+      <SuppliersList />
+    </Panel>
   );
 };

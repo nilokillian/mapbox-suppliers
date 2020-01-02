@@ -126,10 +126,7 @@ export const Map: React.FC<IMapProps> = ({ token }): JSX.Element => {
                 [22, 180]
               ]
             },
-            "circle-color":
-              selectedSuppliers.length > 0
-                ? getCircleColour(onSuppliersFilter())
-                : "red",
+            "circle-color": getCircleColour(onSuppliersFilter()),
             "circle-stroke-color": "#fff",
             "circle-stroke-width": 1
           }

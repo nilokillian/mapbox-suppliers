@@ -1,6 +1,6 @@
 import * as React from "react";
 import { useState, useEffect } from "react";
-import { Checkbox, ICheckboxProps, Stack } from "office-ui-fabric-react/";
+import { Checkbox, Stack } from "office-ui-fabric-react/";
 import { getUniqueSuppiers } from "../mappers/dataSourceMapper";
 import {
   circleStyle,
@@ -22,12 +22,10 @@ export const SuppliersFilterPanel: React.FC<ISuppliersFilterPanelProps> = ({
   const [uniqueSuppiers, setUniqueSuppiers] = useState([]);
 
   useEffect(() => {
-    console.log("props.data", data);
     if (data) setUniqueSuppiers(getUniqueSuppiers(data));
   }, [data]);
 
   const getCheckBoxValue = (value: string): boolean => {
-    console.log("selectedSuppliers", selectedSuppliers);
     return selectedSuppliers.some(s => s === value);
   };
 

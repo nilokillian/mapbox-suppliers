@@ -34,7 +34,7 @@ export const mapContainerStyle = {
 export const suppliersListPanelContainerStyle = {
   position: "absolute" as "absolute",
   top: "0",
-  left: "84%",
+  right: "0",
   margin: "12px",
   backgroundColor: "#ffffff6e",
   color: "#404040",
