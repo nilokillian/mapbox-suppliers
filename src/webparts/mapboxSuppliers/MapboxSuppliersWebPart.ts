@@ -72,6 +72,10 @@ export default class MapboxSuppliersWebPart extends BaseClientSideWebPart<
       "https://api.tiles.mapbox.com/mapbox-gl-js/v1.6.1/mapbox-gl.css"
     );
 
+    SPComponentLoader.loadCss(
+      "https://static2.sharepointonline.com/files/fabric/office-ui-fabric-core/11.0.0/css/fabric.min.css"
+    );
+
     SharePointService.setup(this.context);
     SharePointService.pnp_setup(this.context);
   }

@@ -1,5 +1,9 @@
 @import "~office-ui-fabric-react/dist/sass/References.scss";
 
+.ms-SPLegacyFabricBlock .ms-Icon {
+  font-size: small;
+}
+
 .mapboxSuppliers {
   .container {
     max-width: 700px;
@@ -89,6 +93,7 @@
     line-height: 32px;
     text-align: left;
   }
+
   .sidebarStyle {
     display: inline-block;
     position: absolute;
@@ -108,5 +113,13 @@
     background-color: #bbb;
     border-radius: 50%;
     display: inline-block;
+  }
+
+  .msIconCustom {
+    display: inline-block;
+    font-family: FabricMDL2Icons;
+    font-style: normal;
+    font-weight: 400;
+    font-size: small;
   }
 }

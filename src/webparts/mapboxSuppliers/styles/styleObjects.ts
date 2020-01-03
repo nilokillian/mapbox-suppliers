@@ -39,7 +39,8 @@ export const suppliersListPanelContainerStyle = {
   backgroundColor: "#ffffff6e",
   color: "#404040",
   zIndex: 1,
-  padding: "6px"
+  padding: "6px",
+  fontSize: 12
 };
 
 export const appContainerStyle = {
