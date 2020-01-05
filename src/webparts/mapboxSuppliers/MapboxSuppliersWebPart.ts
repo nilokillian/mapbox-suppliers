@@ -18,7 +18,7 @@ export interface IMapboxSuppliersWebPartProps {
   dataListTitle: string;
 }
 
-//REACT_APP_MAPBOX_TOKEN = pk.eyJ1Ijoibmlsb2tpbGxpYW4iLCJhIjoiY2szaDFya2piMDgxZjNobXN4azY4dmM5aSJ9.EaWxRQjsn5We1NiHATIHQA;
+//pk.eyJ1Ijoibmlsb2tpbGxpYW4iLCJhIjoiY2szaDFya2piMDgxZjNobXN4azY4dmM5aSJ9.EaWxRQjsn5We1NiHATIHQA
 
 export default class MapboxSuppliersWebPart extends BaseClientSideWebPart<
   IMapboxSuppliersWebPartProps

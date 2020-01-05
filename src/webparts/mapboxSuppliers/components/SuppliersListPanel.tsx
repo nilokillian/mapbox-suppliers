@@ -13,7 +13,7 @@ export const SuppliersListPanel: React.FunctionComponent<ISuppliersListPanelProp
 }) => {
   return (
     <Panel
-      headerText="Suppliers List"
+      headerText="Preferred Suppliers List"
       isBlocking={false}
       isOpen={isOpen}
       onDismiss={() => onClose()}

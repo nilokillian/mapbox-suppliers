@@ -1,8 +1,8 @@
 import * as React from "react";
 import { createContext, useState, useEffect } from "react";
+import SharePointService from "../../services/SharePointService";
 import { IMapboxSuppliersProps } from "../interfaces/IMapboxSuppliersProps";
 import { IDataSourceContext } from "../interfaces/IDataSourceContext";
-import SharePointService from "../../services/SharePointService";
 import { IDataSourceList } from "../interfaces/IDataSourceList";
 
 export const DataSourceContext = createContext<IDataSourceContext>(
@@ -20,11 +20,10 @@ export const DataSourceContextProvider: React.FC<IMapboxSuppliersProps> = props 
       ["Supplier", "Sectors", "Region"]
     );
     setData(listItems);
-    // console.log("listItems", listItems);
   };
 
   useEffect(() => {
-    dataListTitle && getData();
+    if (dataListTitle) getData();
   }, [dataListTitle]);
 
   return (

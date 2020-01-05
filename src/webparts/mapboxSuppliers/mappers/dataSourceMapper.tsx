@@ -1,10 +1,7 @@
-import { IDataSourceList } from "../interfaces/IDataSourceList";
 import * as MapBoxGL from "mapbox-gl";
-
-import { Checkbox, ICheckboxProps, Stack } from "office-ui-fabric-react/";
+import { IDataSourceList } from "../interfaces/IDataSourceList";
 
 export const dataMapper = (data: IDataSourceList[]) => {
-  console.log("data", data);
   return data.map(d => ({
     contact: d.AccountManager,
     address: `${d.Address_1} ${d.Address_2}`,
@@ -24,6 +21,19 @@ export const getUniqueSuppiers = (data: IDataSourceList[]) => {
     if (!map.has(d.Supplier.Title)) {
       map.set(d.Supplier.Title, true);
       uniqueValues.push(d);
+    }
+  });
+
+  return uniqueValues;
+};
+
+export const getUniqueRegions = (data: IDataSourceList[]) => {
+  const uniqueValues: string[] = [];
+  const map = new Map();
+  data.map(d => {
+    if (!map.has(d.Region.Title)) {
+      map.set(d.Region.Title, true);
+      uniqueValues.push(d.Region.Title);
     }
   });
 

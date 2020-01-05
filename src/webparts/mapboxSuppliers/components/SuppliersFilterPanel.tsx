@@ -4,7 +4,8 @@ import { Checkbox, Stack } from "office-ui-fabric-react/";
 import { getUniqueSuppiers } from "../mappers/dataSourceMapper";
 import {
   circleStyle,
-  suppliersFilterPanelContainerStyle
+  suppliersFilterPanelContainerStyle,
+  companyTitleStyle
 } from "../styles/styleObjects";
 import { IDataSourceList } from "../interfaces/IDataSourceList";
 
@@ -33,8 +34,6 @@ export const SuppliersFilterPanel: React.FC<ISuppliersFilterPanelProps> = ({
     ev?: React.FormEvent<HTMLElement | HTMLInputElement>,
     checked?: boolean
   ) => {
-    console.log(ev.target["id"], checked);
-
     let changedSelectedSuppliers = [];
 
     if (checked) {
@@ -64,7 +63,7 @@ export const SuppliersFilterPanel: React.FC<ISuppliersFilterPanelProps> = ({
           horizontal
           horizontalAlign="start"
           tokens={{ childrenGap: 5 }}
-          styles={{ root: { padding: 5 } }}
+          styles={{ root: { padding: 5, minWidth: 200 } }}
         >
           <Checkbox
             id={u.Supplier.Title}
@@ -72,7 +71,9 @@ export const SuppliersFilterPanel: React.FC<ISuppliersFilterPanelProps> = ({
             checked={getCheckBoxValue(u.Supplier.Title)}
           />
 
-          <div className="companyTitle">{u.Supplier.Title}</div>
+          <div className="companyTitle" style={companyTitleStyle}>
+            {u.Supplier.Title}
+          </div>
           <span style={circleStyle(u.ColourOnMap)} />
         </Stack>
       ))}
